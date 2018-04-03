@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const avatarPath = 'img/avatars/user';
+  const avatarPath = 'img/avatars/user0';
   const OFFER_TITLES = [
     'Большая уютная квартира',
     'Маленькая неуютная квартира',
@@ -40,19 +40,35 @@
     'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
-  let description;
 
-  const getAvatar = function (count) {
-    return avatarPath + Math.floor(Math.random() * count) + '.png';
-  }
+  const getAvatar = function (min, max) {
+    return avatarPath + window.util.getRandomNumber(min, max) + '.png';
+  };
 
   let OFFERS = [];
 
   for (let i = 0; i < 8; i++) {
-    let offer = {
-      'author': getAvatar(8)
-    };
-    OFFERS.push(offer);
+    OFFERS.push({
+      author: {
+        avatar: getAvatar(1, 8)
+      },
+      offer: {
+        title: window.util.getRandomElement(OFFER_TITLES),
+        address: window.util.getRandomNumber(300, 900) + ' ' + window.util.getRandomNumber(100, 500),
+        price: window.util.getRandomNumber(1000, 1000000),
+        type: window.util.getRandomElement(OFFER_TYPES),
+        rooms: window.util.getRandomNumber(1, 5),
+        guests: window.util.getRandomNumber(1, 10),
+        checkin: window.util.getRandomElement(OFFER_CHECKINS),
+        checkout: window.util.getRandomElement(OFFER_CHECHOUTS),
+        photos: [],
+        description: ''
+      },
+      location: {
+        x: window.util.getRandomNumber(300, 900),
+        y: window.util.getRandomNumber(100, 500)
+      }
+    });
   }
 
   const mapEl = document.querySelector('.map');
