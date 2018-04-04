@@ -117,8 +117,6 @@
     mapPinsListEl.appendChild(fragment);
   };
 
-  createPins(offers);
-
   const createFeaturesList = function (data) {
     let featureItems = '';
 
@@ -161,7 +159,20 @@
     mapEl.appendChild(newMapCard);
   };
 
-  createMapCard(offers[0]);
+  let mainPinEl = mapEl.querySelector('.map__pin--main');
 
-  mapEl.classList.remove('map--faded');
+  mainPinEl.addEventListener('click', function() {
+    mapEl.classList.remove('map--faded');
+
+    createPins(offers);
+
+    let mapPinsEls = mainPinEl.querySelectorAll('.map__pin');
+
+    for (let i = 0; i < mapPinsEls.lengt; i++) {
+      let mapPin = mapPinsEls[i];
+      mapPin.addEventListener('click', function() {
+        createMapCard(offers[0]);
+      });
+    }
+  });
 })();
