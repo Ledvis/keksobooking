@@ -39,29 +39,7 @@
     'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
-
-  const mapEl = document.querySelector('.map');
-  const mapPinsListEl = document.querySelector('.map__pins');
-  const mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
-  const mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
-
-  const avatarPath = 'img/avatars/user0';
-
-  const getAvatar = function(min, max) {
-    return avatarPath + window.util.getRandomNumber(min, max) + '.png';
-  };
-
-  var getRandomArray = function (arr, n) {
-    let newArr = [];
-
-    for (let i = 0; i < n; i++) {
-      newArr.push(arr[i]);
-    }
-
-    return newArr;
-  };
-
-  let offers = [];
+  const AVATAR_PATH = 'img/avatars/user0';
   const LOCATION_MIN_X = 300;
   const LOCATION_MAX_X = 900;
   const LOCATION_MIN_Y = 200;
@@ -74,6 +52,30 @@
   const GUESTS_MAX = 5;
   const PIN_HALF_WIDTH = 25;
   const PIN_FULL_HEIGHT = 70;
+
+  let mapEl = document.querySelector('.map');
+  let mapPinsListEl = document.querySelector('.map__pins');
+  let mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
+  let mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
+
+  const getAvatar = function(min, max) {
+    return AVATAR_PATH + window.util.getRandomNumber(min, max) + '.png';
+  };
+
+  const getRandomArray = function (arr, n) {
+    let newArr = [];
+    let originalArr = arr.slice();
+
+    for (let i = 0; i < n; i++) {
+      let randomIndex = window.util.getRandomIndex(originalArr);
+      newArr.push(originalArr[randomIndex]);
+      originalArr.splice(randomIndex, 1);
+    }
+
+    return newArr;
+  };
+
+  let offers = [];
 
   for (let i = 0; i < 8; i++) {
     offers.push({
@@ -90,7 +92,7 @@
         checkin: window.util.getRandomElement(OFFER_CHECKINS),
         checkout: window.util.getRandomElement(OFFER_CHECHOUTS),
         features: getRandomArray(OFFER_FEATURES, window.util.getRandomIndex(OFFER_FEATURES)),
-        photos: getRandomArray(OFFER_PHOTOS, window.util.getRandomIndex(OFFER_PHOTOS)),
+        photos: getRandomArray(OFFER_PHOTOS, OFFER_PHOTOS.length),
         description: ''
       },
       location: {
@@ -111,6 +113,7 @@
       newPin.querySelector('img').setAttribute('src', data[i].author.avatar);
       fragment.appendChild(newPin);
     }
+
     mapPinsListEl.appendChild(fragment);
   };
 
