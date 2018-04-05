@@ -58,7 +58,7 @@
   let mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   let mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
 
-  const getAvatar = function(min, max) {
+  const getAvatar = function (min, max) {
     return AVATAR_PATH + window.util.getRandomNumber(min, max) + '.png';
   };
 
@@ -102,6 +102,8 @@
     });
   }
 
+  let userPinsList;
+
   const createPins = function (data) {
     let fragment = document.createDocumentFragment();
 
@@ -115,6 +117,8 @@
     }
 
     mapPinsListEl.appendChild(fragment);
+
+    return userPinsList = fragment;
   };
 
   const createFeaturesList = function (data) {
@@ -159,20 +163,29 @@
     mapEl.appendChild(newMapCard);
   };
 
-  let mainPinEl = mapEl.querySelector('.map__pin--main');
+  let mapPinEl = mapEl.querySelector('.map__pin--main');
+  let formEl = document.querySelector('.notice__form');
+  let fieldsetEls = formEl.querySelectorAll('fieldset');
 
-  mainPinEl.addEventListener('click', function() {
+  mapPinEl.addEventListener('click', function () {
+    let fieldsetEl;
     mapEl.classList.remove('map--faded');
+    formEl.classList.remove('notice__form--disabled');
 
     createPins(offers);
 
-    let mapPinsEls = mainPinEl.querySelectorAll('.map__pin');
-
-    for (let i = 0; i < mapPinsEls.lengt; i++) {
-      let mapPin = mapPinsEls[i];
-      mapPin.addEventListener('click', function() {
-        createMapCard(offers[0]);
-      });
+    for (let i = 0; i < fieldsetEls.length; i++) {
+      fieldsetEl = fieldsetEls[i];
+      fieldsetEl.removeAttribute('disabled');
     }
+
+    // for (let i = 0; i < userPinsList.length; i++) {
+    //   let userPinEl = userPinsList[i];
+    //   if (userPinEl.classList !== 'map__pin--main') {
+    //     userPinEl.addEventListener('click', function () {
+    //       createMapCard(offers[0]);
+    //     });
+    //   }
+    // }
   });
 })();
