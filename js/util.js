@@ -1,6 +1,11 @@
 'use strict';
 
 (function () {
+  const keyCode = {
+    ESC: 27,
+    ENTER: 13
+  };
+
   window.util = {
     getRandomIndex: function(arr) {
       return Math.floor(Math.random() * arr.length);
@@ -22,6 +27,11 @@
       }
 
       return newArr;
+    },
+    isEscEvent: function(evt, action) {
+      if (evt.keyCode === keyCode.ESC) {
+        action();
+      }
     }
   };
 })();
