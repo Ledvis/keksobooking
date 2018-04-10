@@ -7,16 +7,41 @@
   let mapMainPinEl = mapEl.querySelector('.map__pin--main');
   let mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
-  const showOfferInfo = function(index) {
+  const hideOfferInfo = function() {
     let mapCard = mapEl.querySelector('.map__card');
-    while (mapCard) {
-      mapCard.remove();
-      mapCard = false;
+    if (mapCard) {
+      mapCard.parentNode.removeChild(mapCard);
+      mapEl.removeEventListener('keydown', popUpEscHandler);
     }
-    let newMapCard = window.popup.createMapCard(window.offer.offersList[index]);
-    mapEl.appendChild(newMapCard);
-    window.dialog(newMapCard);
   };
+
+  const showOfferInfo = function(index) {
+    hideOfferInfo();
+    let mapCard = window.popup.createMapCard(window.offer.offersList[index]);
+    let mapCardCloseEl = mapCard.querySelector('.popup__close');
+    mapCardCloseEl.addEventListener('click', hideOfferInfo);
+    mapEl.appendChild(mapCard);
+  };
+
+  const mapClickHandler = function(evt) {
+    let clickedEl = evt.target;
+    if (!clickedEl.hasAttribute('data-pin')) {
+      clickedEl = clickedEl.parentNode;
+    }
+
+    let clickedIndex = clickedEl.getAttribute('data-pin');
+    if (clickedIndex) {
+      showOfferInfo(clickedIndex);
+      clickedEl.classList.add('.popup__pin--active');
+    }
+  };
+
+  const popUpEscHandler = function(evt) {
+    window.util.isEscEvent(evt, hideOfferInfo);
+  };
+
+  mapEl.addEventListener('click', mapClickHandler, true);
+  mapEl.addEventListener('keydown', popUpEscHandler, true);
 
   const generatePins = function(data) {
     let fragment = document.createDocumentFragment();
@@ -29,12 +54,6 @@
       newPin.querySelector('img').setAttribute('src', data[i].author.avatar);
       newPin.setAttribute('data-pin', i);
       fragment.appendChild(newPin);
-
-      newPin.addEventListener('click', function(evt) {
-        let newPinIndex = evt.currentTarget.getAttribute('data-pin');
-        showOfferInfo(newPinIndex);
-        newPin.classList.add('map__pin--active');
-      });
     }
 
     mapPinsListEl.appendChild(fragment);

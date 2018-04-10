@@ -1,15 +1,28 @@
 'use strict';
 
-(function () {
+(function() {
   let offersList = [];
 
-  const getAvatar = function (avatarId) {
+  const getAvatar = function(avatarId) {
     let avatarIndex = avatarId + 1;
 
     return avatarIndex = window.consts.AVATAR_PATH + '0' + avatarIndex + '.png';
   };
 
-  const generateOffers = function (count) {
+  const translateOfferType = function(type) {
+    switch (type) {
+    case 'flat':
+      return 'Квартира';
+    case 'house':
+      return 'Дом';
+    case 'bungalo':
+      return 'Халупа';
+    default:
+      break;
+    }
+  };
+
+  const generateOffers = function(count) {
     for (let i = 0; i < count; i++) {
       offersList.push({
         author: {
@@ -19,7 +32,7 @@
           title: window.util.getRandomElement(window.consts.OFFER_TITLES),
           address: window.util.getRandomNumber(window.consts.LOCATION_MIN_X, window.consts.LOCATION_MAX_X) + ' ' + window.util.getRandomNumber(window.consts.LOCATION_MIN_Y, window.consts.LOCATION_MAX_Y),
           price: window.util.getRandomNumber(window.consts.PRICE_MIN, window.consts.PRICE_MAX),
-          type: window.util.getRandomElement(window.consts.OFFER_TYPES),
+          type: translateOfferType(window.util.getRandomElement(window.consts.OFFER_TYPES)),
           rooms: window.util.getRandomNumber(window.consts.ROOMS_MIN, window.consts.ROOMS_MAX),
           guests: window.util.getRandomNumber(window.consts.GUESTS_MIN, window.consts.GUESTS_MAX),
           checkin: window.util.getRandomElement(window.consts.OFFER_CHECKINS),
