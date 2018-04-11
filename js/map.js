@@ -7,20 +7,18 @@
   let mapMainPinEl = mapEl.querySelector('.map__pin--main');
   let mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
-  const deleteOfferInfo = function (pin) {
-    let activatePin = pin;
-    activatePin.classList.remove('popup__pin--active');
-    let mapCard = mapEl.querySelector('.map__card');
-    mapCard.parentNode.removeChild(mapCard);
-    mapEl.removeEventListener('keydown', popUpEscHandler);
-  };
-
   const clearOfferInfo = function () {
     let mapCard = mapEl.querySelector('.map__card');
     if (mapCard) {
       mapCard.parentNode.removeChild(mapCard);
       mapEl.removeEventListener('keydown', popUpEscHandler);
     }
+  };
+
+  const deleteOfferInfo = function (pin) {
+    let activatePin = pin;
+    activatePin.classList.remove('popup__pin--active');
+    clearOfferInfo();
   };
 
   const showOfferInfo = function (index, pin) {
