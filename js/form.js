@@ -14,7 +14,18 @@
     }
   };
 
+  const disableForm = function() {
+    formEl.classList.add('notice__form--disabled');
+    let fieldsetEl;
+
+    for (let i = 0; i < fieldsetEls.length; i++) {
+      fieldsetEl = fieldsetEls[i];
+      fieldsetEl.setAttribute('disabled', true);
+    }
+  };
+
   window.form = {
-    enableForm: enableForm
+    enableForm: enableForm,
+    disableForm: disableForm
   };
 })();
