@@ -4,7 +4,7 @@
   // DOM elements
   let mapEl = document.querySelector('.map');
   let mapPinsListEl = mapEl.querySelector('.map__pins');
-  let mapMainPinEl = mapEl.querySelector('.map__pin--main');
+  let mapPinEl = mapEl.querySelector('.map__pin--main');
   let formResetEl = document.querySelector('.form__reset');
   let mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
@@ -97,10 +97,6 @@
     }
   };
 
-  mapMainPinEl.addEventListener('click', activatePage);
+  mapPinEl.addEventListener('click', activatePage);
   formResetEl.addEventListener('click', disablePage);
-
-  window.map = {
-    mapMainPinEl: mapMainPinEl
-  };
 })();
