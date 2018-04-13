@@ -1,10 +1,11 @@
 'use strict';
 
 (function() {
+  const MAP_DISABLED_CLASS = 'map--faded';
+
   // DOM elements
   let mapEl = document.querySelector('.map');
   let mapPinsListEl = mapEl.querySelector('.map__pins');
-  let mapPinEl = mapEl.querySelector('.map__pin--main');
   let formResetEl = document.querySelector('.form__reset');
   let mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
@@ -88,15 +89,21 @@
     deletePins();
   };
 
-  const activatePage = function() {
-    if (mapEl.classList.contains('map--faded')) {
-      mapEl.classList.remove('map--faded');
-      window.form.enableForm();
-      window.offer.generateOffers(window.consts.OFFERS_QUANTITY);
-      generatePins(window.offer.offersList);
-    }
+  const activePage = function() {
+    mapEl.classList.remove('map--faded');
+    window.form.enableForm();
+    window.offer.generateOffers(window.consts.OFFERS_QUANTITY);
+    generatePins(window.offer.offersList);
   };
 
-  mapPinEl.addEventListener('click', activatePage);
+  const checkPageState = function() {
+    return mapEl.classList.contains(MAP_DISABLED_CLASS);
+  }
+
   formResetEl.addEventListener('click', disablePage);
+
+  window.map = {
+    checkPageState: checkPageState,
+    activePage: activePage
+  };
 })();
