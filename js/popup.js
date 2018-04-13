@@ -30,7 +30,7 @@
     mapCardType.innerHTML = card.offer.type;
     mapCardAccommodation.innerHTML = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
     mapCardSchedule.innerHTML = 'Заезд после ' + card.offer.checkin + ', выезд до ' + card.offer.checkout;
-    mapCardFeatures.innerHTML = generateFeaturesList(window.offer.offersList[0]);
+    mapCardFeatures.innerHTML = generateFeaturesList(window.data.offersList[0]);
 
     for (let i = 0; i < card.offer.photos.length; i++) {
       let mapCartPictureEl = mapCardPicturesList.querySelector('li').cloneNode(true);

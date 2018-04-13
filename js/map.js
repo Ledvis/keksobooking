@@ -1,10 +1,11 @@
 'use strict';
 
 (function() {
+  const MAP_DISABLED_CLASS = 'map--faded';
+
   // DOM elements
   let mapEl = document.querySelector('.map');
   let mapPinsListEl = mapEl.querySelector('.map__pins');
-  let mapPinEl = mapEl.querySelector('.map__pin--main');
   let formResetEl = document.querySelector('.form__reset');
   let mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
@@ -16,37 +17,22 @@
     }
   };
 
-  const deleteOfferInfo = function(pin) {
-    let activatePin = pin;
-    activatePin.classList.remove('popup__pin--active');
-    clearOfferInfo();
-  };
-
-  const showOfferInfo = function(index, pin) {
-    clearOfferInfo();
-    let mapCard = window.popup.createMapCard(window.offer.offersList[index]);
-    let mapCardCloseEl = mapCard.querySelector('.popup__close');
-    mapCardCloseEl.addEventListener('click', function() {
-      deleteOfferInfo(pin);
-    });
-    mapEl.appendChild(mapCard);
-  };
-
   const mapClickHandler = function(evt) {
     let clickedEl = evt.target;
+
     if (!clickedEl.hasAttribute('data-pin')) {
       clickedEl = clickedEl.parentNode;
     }
 
     let clickedIndex = clickedEl.getAttribute('data-pin');
+
     if (clickedIndex) {
       let activatePin = mapEl.querySelector('.popup__pin--active');
       if (activatePin) {
         activatePin.classList.remove('popup__pin--active');
       }
-
       clickedEl.classList.add('popup__pin--active');
-      showOfferInfo(clickedIndex, clickedEl);
+      window.showCard.showOfferInfo(clickedIndex, clickedEl);
     }
   };
 
@@ -88,15 +74,22 @@
     deletePins();
   };
 
-  const activatePage = function() {
-    if (mapEl.classList.contains('map--faded')) {
-      mapEl.classList.remove('map--faded');
-      window.form.enableForm();
-      window.offer.generateOffers(window.consts.OFFERS_QUANTITY);
-      generatePins(window.offer.offersList);
-    }
+  const activePage = function() {
+    mapEl.classList.remove('map--faded');
+    window.form.enableForm();
+    window.data.generateOffers(window.consts.OFFERS_QUANTITY);
+    generatePins(window.data.offersList);
   };
 
-  mapPinEl.addEventListener('click', activatePage);
+  const checkPageState = function() {
+    return mapEl.classList.contains(MAP_DISABLED_CLASS);
+  };
+
   formResetEl.addEventListener('click', disablePage);
+
+  window.map = {
+    checkPageState: checkPageState,
+    activePage: activePage,
+    clearOfferInfo: clearOfferInfo
+  };
 })();

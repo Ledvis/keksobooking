@@ -49,7 +49,7 @@
     }
   };
 
-  window.offer = {
+  window.data = {
     generateOffers: generateOffers,
     offersList: offersList
   };
