@@ -4,7 +4,7 @@
   const MapLimit = {
     TOP: 100,
     RIGHT: 1200,
-    BOTTOM: 450,
+    BOTTOM: 500,
     LEFT: 0
   };
 

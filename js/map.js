@@ -17,37 +17,23 @@
     }
   };
 
-  const deleteOfferInfo = function(pin) {
-    let activatePin = pin;
-    activatePin.classList.remove('popup__pin--active');
-    clearOfferInfo();
-  };
-
-  const showOfferInfo = function(index, pin) {
-    clearOfferInfo();
-    let mapCard = window.popup.createMapCard(window.offer.offersList[index]);
-    let mapCardCloseEl = mapCard.querySelector('.popup__close');
-    mapCardCloseEl.addEventListener('click', function() {
-      deleteOfferInfo(pin);
-    });
-    mapEl.appendChild(mapCard);
-  };
-
   const mapClickHandler = function(evt) {
     let clickedEl = evt.target;
+
     if (!clickedEl.hasAttribute('data-pin')) {
       clickedEl = clickedEl.parentNode;
     }
 
     let clickedIndex = clickedEl.getAttribute('data-pin');
+
     if (clickedIndex) {
       let activatePin = mapEl.querySelector('.popup__pin--active');
       if (activatePin) {
         activatePin.classList.remove('popup__pin--active');
       }
-
       clickedEl.classList.add('popup__pin--active');
-      showOfferInfo(clickedIndex, clickedEl);
+      let card = window.showCard.showCardInfo(clickedIndex, clickedEl);
+      mapEl.appendChild(card);
     }
   };
 
@@ -92,18 +78,19 @@
   const activePage = function() {
     mapEl.classList.remove('map--faded');
     window.form.enableForm();
-    window.offer.generateOffers(window.consts.OFFERS_QUANTITY);
-    generatePins(window.offer.offersList);
+    window.data.generateOffers(window.consts.OFFERS_QUANTITY);
+    generatePins(window.data.offersList);
   };
 
   const checkPageState = function() {
     return mapEl.classList.contains(MAP_DISABLED_CLASS);
-  }
+  };
 
   formResetEl.addEventListener('click', disablePage);
 
   window.map = {
     checkPageState: checkPageState,
-    activePage: activePage
+    activePage: activePage,
+    clearOfferInfo: clearOfferInfo
   };
 })();
