@@ -1,6 +1,9 @@
 'use strict';
 
 (function() {
+  const PINS_QUANTITY = 5;
+  const MAP_PIN_WIDTH = 50;
+  const MAP_PIN_HEIGTH = 70;
   const MAP_DISABLED_CLASS = 'map--faded';
 
   // DOM elements
@@ -8,6 +11,9 @@
   let mapPinsListEl = mapEl.querySelector('.map__pins');
   let formResetEl = document.querySelector('.form__reset');
   let mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
+
+  let loadedOffers = [];
+  let filtedOffers = [];
 
   const clearOfferInfo = function() {
     let mapCard = mapEl.querySelector('.map__card');
@@ -27,13 +33,7 @@
     let clickedIndex = clickedEl.getAttribute('data-pin');
 
     if (clickedIndex) {
-      let activatePin = mapEl.querySelector('.popup__pin--active');
-      if (activatePin) {
-        activatePin.classList.remove('popup__pin--active');
-      }
-      clickedEl.classList.add('popup__pin--active');
-      let card = window.showCard.showCardInfo(clickedIndex, clickedEl);
-      mapEl.appendChild(card);
+      window.showCard.renderPopup(filtedOffers[clickedIndex]);
     }
   };
 
@@ -75,10 +75,39 @@
     deletePins();
   };
 
-  const activePage = function() {
-    mapEl.classList.remove('map--faded');
+  const showOffersOnMap = function(data) {
+    mapPinsListEl.appendChild(data);
+  };
+
+  const renderOffers = function(data) {
+    let pins = document.createDocumentFragment();
+
+    data.forEach(function(offer, i) {
+      let pin = mapPinTemplate.cloneNode(true);
+      let pinLeft = (offer.location.x - MAP_PIN_WIDTH / 2) + 'px';
+      let pinTop = (offer.location.y - MAP_PIN_HEIGTH) + 'px';
+
+      pin.setAttribute('style', 'left: ' + pinLeft + '; top: ' + pinTop);
+      pin.querySelector('img').setAttribute('src', offer.author.avatar);
+      pin.setAttribute('data-pin', i);
+      pins.appendChild(pin);
+    });
+
+    return pins;
+  };
+
+  const succesLoadDataHandler = function(loadedData) {
+    loadedOffers = loadedData.slice(0);
+    filtedOffers = loadedOffers.slice(0, PINS_QUANTITY);
+    let renderedPins = renderOffers(filtedOffers);
+    showOffersOnMap(renderedPins);
+    window.filter.enable();
+  };
+
+  const activatePage = function() {
+    mapEl.classList.remove(MAP_DISABLED_CLASS);
     window.form.enableForm();
-    window.data.generateOffers(window.consts.OFFERS_QUANTITY);
+    window.backend.load(succesLoadDataHandler, window.notification.showError);
     generatePins(window.data.offersList);
   };
 
@@ -90,7 +119,7 @@
 
   window.map = {
     checkPageState: checkPageState,
-    activePage: activePage,
+    activatePage: activatePage,
     clearOfferInfo: clearOfferInfo
   };
 })();

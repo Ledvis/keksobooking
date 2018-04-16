@@ -22,6 +22,10 @@
     }
   };
 
+  const getFeatures = function() {
+
+  };
+
   const generateOffers = function(count) {
     for (let i = 0; i < count; i++) {
       offersList.push({
