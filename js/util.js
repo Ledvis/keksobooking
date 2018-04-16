@@ -32,6 +32,11 @@
       if (evt.keyCode === keyCode.ESC) {
         action();
       }
+    },
+    isEnterEvent: function(evt, action) {
+      if (evt.keyCode === keyCode.ENTER) {
+        action();
+      }
     }
   };
 })();

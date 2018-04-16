@@ -63,7 +63,7 @@
       let isPageDisabled = window.map.checkPageState();
 
       if (isPageDisabled) {
-        window.map.activePage();
+        window.map.activatePage();
       }
 
       document.removeEventListener('mousemove', onMouseMove);
@@ -75,4 +75,11 @@
   };
 
   mainPinEl.addEventListener('mousedown', onMouseDownClick);
+  mainPinEl.addEventListener('keydown', function(evt) {
+    let isPageDisabled = window.map.checkPageState();
+
+    if (isPageDisabled) {
+      window.util.isEnterEvent(evt, window.map.activatePage);
+    }
+  });
 })();
