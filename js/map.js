@@ -33,13 +33,7 @@
     let clickedIndex = clickedEl.getAttribute('data-pin');
 
     if (clickedIndex) {
-      let activatePin = mapEl.querySelector('.popup__pin--active');
-      if (activatePin) {
-        activatePin.classList.remove('popup__pin--active');
-      }
-      clickedEl.classList.add('popup__pin--active');
-      let card = window.showCard.showCardInfo(clickedIndex, clickedEl);
-      mapEl.appendChild(card);
+      window.showCard.renderPopup(filtedOffers[clickedIndex]);
     }
   };
 
@@ -81,6 +75,10 @@
     deletePins();
   };
 
+  const showOffersOnMap = function(data) {
+    mapPinsListEl.appendChild(data);
+  };
+
   const renderOffers = function(data) {
     let pins = document.createDocumentFragment();
 
@@ -101,8 +99,9 @@
   const succesLoadDataHandler = function(loadedData) {
     loadedOffers = loadedData.slice(0);
     filtedOffers = loadedOffers.slice(0, PINS_QUANTITY);
-
     let renderedPins = renderOffers(filtedOffers);
+    showOffersOnMap(renderedPins);
+    window.filter.enable();
   };
 
   const activatePage = function() {
