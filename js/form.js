@@ -60,6 +60,11 @@
       priceEl.setCustomValidity('');
       priceEl.style.borderColor = INPUT_DEFAULT_BORDER_COLOR;
     }
+
+    priceEl.addEventListener('input', function() {
+      priceEl.setCustomValidity('');
+      priceEl.style.borderColor = INPUT_DEFAULT_BORDER_COLOR;
+    });
   };
 
   // Sync checkin fields
