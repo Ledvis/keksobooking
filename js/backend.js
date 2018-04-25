@@ -20,31 +20,31 @@
 
     xhr.addEventListener('load', function() {
       switch (xhr.status) {
-      case Code.SUCCESS:
-        onLoad(xhr.response);
-        break;
-      case Code.BAD_REQUEST:
-        onError('Статус ответа: ' + xhr.status + '. В запросе синтаксическая ошибка.');
-        break;
-      case Code.FORBIDDEN:
-        onError('Статус ответа: ' + xhr.status + '. В запросе отказано, недостаточно прав.');
-        break;
-      case Code.NOT_FOUND:
-        onError('Статус ответа: ' + xhr.status + '. Страница не найдена');
-        break;
-      case Code.SERVER_ERROR:
-        onError('Статус ответа: ' + xhr.status + '. Ой, неполадки на сервере, попробуйте чуть позже.');
-        break;
-      default:
-        onError('Статус ответа: ' + xhr.status + '' + xhr.statusText);
+        case Code.SUCCESS:
+          onLoad(xhr.response);
+          break;
+        case Code.BAD_REQUEST:
+          onError('Статус ответа: ' + xhr.status + '. В запросе синтаксическая ошибка.');
+          break;
+        case Code.FORBIDDEN:
+          onError('Статус ответа: ' + xhr.status + '. В запросе отказано, недостаточно прав.');
+          break;
+        case Code.NOT_FOUND:
+          onError('Статус ответа: ' + xhr.status + '. Страница не найдена');
+          break;
+        case Code.SERVER_ERROR:
+          onError('Статус ответа: ' + xhr.status + '. Ой, неполадки на сервере, попробуйте чуть позже.');
+          break;
+        default:
+          onError('Статус ответа: ' + xhr.status + '' + xhr.statusText);
       }
     });
 
-    xhr.addEventListener('error', function () {
+    xhr.addEventListener('error', function() {
       onError('Ошибка соединения');
     });
 
-    xhr.addEventListener('timeout', function () {
+    xhr.addEventListener('timeout', function() {
       onError('Запрос не успел выполниться за ' + TIMEOUT + ' мс');
     });
 

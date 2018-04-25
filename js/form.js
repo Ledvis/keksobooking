@@ -9,25 +9,14 @@
   const priceEl = formEl.querySelector('#price');
   const timeinEl = formEl.querySelector('#timein');
   const timeoutEl = formEl.querySelector('#timeout');
+  const typeEl = formEl.querySelector('#type');
+  const roomEl = formEl.querySelector('#room_number');
 
-  const enableForm = function() {
-    formEl.classList.remove(FORM_DISABLED_CLASS);
-    let fieldsetEl;
-
-    for (let i = 0; i < fieldsetsEl.length; i++) {
-      fieldsetEl = fieldsetsEl[i];
-      fieldsetEl.removeAttribute('disabled');
-    }
-  };
-
-  const disableForm = function() {
-    formEl.classList.add('notice__form--disabled');
-    let fieldsetEl;
-
-    for (let i = 0; i < fieldsetsEl.length; i++) {
-      fieldsetEl = fieldsetsEl[i];
-      fieldsetEl.setAttribute('disabled', true);
-    }
+  const OfferType = {
+    BUNGALO: {minPrice: 0},
+    FLAT: {minPrice: 1000},
+    HOUSE: {minPrice: 5000},
+    PALACE: {minPrice: 10000}
   };
 
   const validateTitle = function() {
@@ -67,6 +56,29 @@
     });
   };
 
+  const successSubmitFormHandler = function() {
+    window.notification.showInfo();
+    window.map.disablePage();
+  };
+
+  const updatePrice = function() {
+    let minPrice = OfferType[typeEl.value.toUpperCase()].minPrice;
+    priceEl.min = minPrice;
+    priceEl.placeholder = minPrice;
+  };
+
+  const updateCapacity = function() {
+
+  };
+
+  const typeElChangeHandler = function() {
+    updatePrice();
+  };
+
+  const roomElChangeHandler = function() {
+    updateCapacity();
+  }
+
   // Sync checkin fields
   timeinEl.addEventListener('change', function() {
     timeoutEl.value = timeinEl.value;
@@ -82,6 +94,34 @@
   priceEl.addEventListener('keyup', function() {
     validatePrice();
   });
+
+  formEl.addEventListener('submit', function(evt) {
+    evt.preventDefault();
+    let formData = new FormData(formEl);
+    window.backend.save(formData, successSubmitFormHandler, window.notification.showError);
+  });
+
+  const enableForm = function() {
+    formEl.classList.remove(FORM_DISABLED_CLASS);
+    typeEl.addEventListener('change', typeElChangeHandler);
+    roomEl.addEventListener('change', roomElChangeHandler);
+    let fieldsetEl;
+
+    for (let i = 0; i < fieldsetsEl.length; i++) {
+      fieldsetEl = fieldsetsEl[i];
+      fieldsetEl.removeAttribute('disabled');
+    }
+  };
+
+  const disableForm = function() {
+    formEl.classList.add(FORM_DISABLED_CLASS);
+    let fieldsetEl;
+
+    for (let i = 0; i < fieldsetsEl.length; i++) {
+      fieldsetEl = fieldsetsEl[i];
+      fieldsetEl.setAttribute('disabled', true);
+    }
+  };
 
   window.form = {
     enableForm: enableForm,

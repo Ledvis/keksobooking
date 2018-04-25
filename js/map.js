@@ -13,7 +13,7 @@
   let mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
   let loadedOffers = [];
-  let filtedOffers = [];
+  let filteredOffers = [];
 
   const clearOfferInfo = function() {
     let mapCard = mapEl.querySelector('.map__card');
@@ -33,7 +33,7 @@
     let clickedIndex = clickedEl.getAttribute('data-pin');
 
     if (clickedIndex) {
-      window.showCard.renderPopup(filtedOffers[clickedIndex]);
+      window.showCard.renderPopup(filteredOffers[clickedIndex]);
     }
   };
 
@@ -98,8 +98,8 @@
 
   const succesLoadDataHandler = function(loadedData) {
     loadedOffers = loadedData.slice(0);
-    filtedOffers = loadedOffers.slice(0, PINS_QUANTITY);
-    let renderedPins = renderOffers(filtedOffers);
+    filteredOffers = loadedOffers.slice(0, PINS_QUANTITY);
+    let renderedPins = renderOffers(filteredOffers);
     showOffersOnMap(renderedPins);
     window.filter.enable();
   };
