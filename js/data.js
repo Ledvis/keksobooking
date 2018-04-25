@@ -11,20 +11,20 @@
 
   const translateOfferType = function(type) {
     switch (type) {
-    case 'flat':
-      return 'Квартира';
-    case 'house':
-      return 'Дом';
-    case 'bungalo':
-      return 'Халупа';
-    default:
-      break;
+      case 'flat':
+        return 'Квартира';
+      case 'house':
+        return 'Дом';
+      case 'bungalo':
+        return 'Халупа';
+      default:
+        break;
     }
   };
 
-  const getFeatures = function() {
+  // const getFeatures = function() {
 
-  };
+  // };
 
   const generateOffers = function(count) {
     for (let i = 0; i < count; i++) {
