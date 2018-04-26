@@ -11,12 +11,20 @@
   const timeoutEl = formEl.querySelector('#timeout');
   const typeEl = formEl.querySelector('#type');
   const roomEl = formEl.querySelector('#room_number');
+  const capacityEl = formEl.querySelector('#capacity');
 
   const OfferType = {
     BUNGALO: {minPrice: 0},
     FLAT: {minPrice: 1000},
     HOUSE: {minPrice: 5000},
     PALACE: {minPrice: 10000}
+  };
+
+  const OfferRoomCapacity = {
+    1: ['1'],
+    2: ['2', '1'],
+    3: ['3', '2', '1'],
+    100: ['0']
   };
 
   const validateTitle = function() {
@@ -68,7 +76,10 @@
   };
 
   const updateCapacity = function() {
+    let selectedRooms = parseInt(roomEl.options[roomEl.selectedIndex].value);
+    let allowedGuests = OfferRoomCapacity[selectedRooms];
 
+    capacityEl.value = allowedGuests;
   };
 
   const typeElChangeHandler = function() {
@@ -77,7 +88,7 @@
 
   const roomElChangeHandler = function() {
     updateCapacity();
-  }
+  };
 
   // Sync checkin fields
   timeinEl.addEventListener('change', function() {
