@@ -82,4 +82,8 @@
       window.util.isEnterEvent(evt, window.map.activatePage);
     }
   });
+
+  window.pin = {
+    mainPin: mainPinEl
+  }
 })();

@@ -131,6 +131,7 @@
   };
 
   window.showCard = {
-    renderPopup: renderPopup
+    render: renderPopup,
+    close: closePopup
   };
 })();

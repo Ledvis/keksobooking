@@ -5,6 +5,7 @@
   const MAP_PIN_WIDTH = 50;
   const MAP_PIN_HEIGTH = 70;
   const MAP_DISABLED_CLASS = 'map--faded';
+  const MAP_PIN_ARROW_Y_CORRECTION = 50;
 
   // DOM elements
   let mapEl = document.querySelector('.map');
@@ -14,6 +15,9 @@
 
   let loadedOffers = [];
   let filteredOffers = [];
+
+  let initialPinX = window.pin.mainPin.offsetLeft;
+  let initialPinY = window.pin.mainPin.offsetTop + MAP_PIN_ARROW_Y_CORRECTION;
 
   const clearOfferInfo = function() {
     let mapCard = mapEl.querySelector('.map__card');
@@ -33,7 +37,7 @@
     let clickedIndex = clickedEl.getAttribute('data-pin');
 
     if (clickedIndex) {
-      window.showCard.renderPopup(filteredOffers[clickedIndex]);
+      window.showCard.render(filteredOffers[clickedIndex]);
     }
   };
 
@@ -70,9 +74,14 @@
   };
 
   const disablePage = function() {
-    mapEl.classList.add('map--faded');
-    window.form.disableForm();
+    mapEl.classList.add(MAP_DISABLED_CLASS);
     deletePins();
+    window.showCard.close();
+    window.pin.mainPin.style.left = '';
+    window.pin.mainPin.style.top = '';
+    window.form.disable();
+    window.form.updateAddress(initialPinX, initialPinY);
+    window.scrollTo(0, 0);
   };
 
   const showOffersOnMap = function(data) {
@@ -106,7 +115,7 @@
 
   const activatePage = function() {
     mapEl.classList.remove(MAP_DISABLED_CLASS);
-    window.form.enableForm();
+    window.form.enable();
     window.backend.load(succesLoadDataHandler, window.notification.showError);
     generatePins(window.data.offersList);
   };
@@ -120,6 +129,7 @@
   window.map = {
     checkPageState: checkPageState,
     activatePage: activatePage,
+    disablePage: disablePage,
     clearOfferInfo: clearOfferInfo
   };
 })();

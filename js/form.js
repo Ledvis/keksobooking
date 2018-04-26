@@ -3,21 +3,33 @@
 (function() {
   const INPUT_DEFAULT_BORDER_COLOR = '#d9d9d3';
   const FORM_DISABLED_CLASS = 'notice__form--disabled';
+  const NO_GUESTS_ALLOWED = 100;
   const formEl = document.querySelector('.notice__form');
+  const resetEl = formEl.querySelector('.form__reset');
   const fieldsetsEl = formEl.querySelectorAll('fieldset');
   const titleEl = formEl.querySelector('#title');
+  const addressEl = formEl.querySelector('#address');
   const priceEl = formEl.querySelector('#price');
   const timeinEl = formEl.querySelector('#timein');
   const timeoutEl = formEl.querySelector('#timeout');
   const typeEl = formEl.querySelector('#type');
   const roomEl = formEl.querySelector('#room_number');
-  const capacityEl = formEl.querySelector('#capacity');
+  const capacitySelectEl = formEl.querySelector('#capacity');
+  const capacityOptionsEl = capacitySelectEl.querySelectorAll('option');
 
   const OfferType = {
-    BUNGALO: {minPrice: 0},
-    FLAT: {minPrice: 1000},
-    HOUSE: {minPrice: 5000},
-    PALACE: {minPrice: 10000}
+    BUNGALO: {
+      minPrice: 0
+    },
+    FLAT: {
+      minPrice: 1000
+    },
+    HOUSE: {
+      minPrice: 5000
+    },
+    PALACE: {
+      minPrice: 10000
+    }
   };
 
   const OfferRoomCapacity = {
@@ -67,6 +79,11 @@
   const successSubmitFormHandler = function() {
     window.notification.showInfo();
     window.map.disablePage();
+    window.filter.reset();
+  };
+
+  const updateAddress = function(x, y) {
+    addressEl.value = x + ', ' + y;
   };
 
   const updatePrice = function() {
@@ -79,7 +96,19 @@
     let selectedRooms = parseInt(roomEl.options[roomEl.selectedIndex].value);
     let allowedGuests = OfferRoomCapacity[selectedRooms];
 
-    capacityEl.value = allowedGuests;
+    capacitySelectEl.value = selectedRooms;
+
+    if (selectedRooms === NO_GUESTS_ALLOWED) {
+      capacitySelectEl.value = 0;
+    }
+
+    capacityOptionsEl.forEach(function(item) {
+      item.disabled = true;
+
+      if (allowedGuests.indexOf(item.value) !== -1) {
+        item.disabled = false;
+      }
+    });
   };
 
   const typeElChangeHandler = function() {
@@ -88,6 +117,39 @@
 
   const roomElChangeHandler = function() {
     updateCapacity();
+  };
+
+  const resetForm = function() {
+    formEl.reset();
+    updatePrice();
+    titleEl.style.borderColor = INPUT_DEFAULT_BORDER_COLOR;
+    priceEl.style.borderColor = INPUT_DEFAULT_BORDER_COLOR;
+  };
+
+  const enableForm = function() {
+    formEl.classList.remove(FORM_DISABLED_CLASS);
+    typeEl.addEventListener('change', typeElChangeHandler);
+    roomEl.addEventListener('change', roomElChangeHandler);
+    let fieldsetEl;
+
+    for (let i = 0; i < fieldsetsEl.length; i++) {
+      fieldsetEl = fieldsetsEl[i];
+      fieldsetEl.removeAttribute('disabled');
+    }
+  };
+
+  const disableFormFields = function() {
+    fieldsetsEl.forEach(function(fieldset) {
+      fieldset.disabled = true;
+    });
+  };
+
+  const disableForm = function() {
+    formEl.classList.add(FORM_DISABLED_CLASS);
+    typeEl.removeEventListener('change', typeElChangeHandler);
+    roomEl.removeEventListener('change', roomElChangeHandler);
+    disableFormFields();
+    resetForm();
   };
 
   // Sync checkin fields
@@ -112,30 +174,13 @@
     window.backend.save(formData, successSubmitFormHandler, window.notification.showError);
   });
 
-  const enableForm = function() {
-    formEl.classList.remove(FORM_DISABLED_CLASS);
-    typeEl.addEventListener('change', typeElChangeHandler);
-    roomEl.addEventListener('change', roomElChangeHandler);
-    let fieldsetEl;
-
-    for (let i = 0; i < fieldsetsEl.length; i++) {
-      fieldsetEl = fieldsetsEl[i];
-      fieldsetEl.removeAttribute('disabled');
-    }
-  };
-
-  const disableForm = function() {
-    formEl.classList.add(FORM_DISABLED_CLASS);
-    let fieldsetEl;
-
-    for (let i = 0; i < fieldsetsEl.length; i++) {
-      fieldsetEl = fieldsetsEl[i];
-      fieldsetEl.setAttribute('disabled', true);
-    }
-  };
+  resetEl.addEventListener('click', function() {
+    window.map.disablePage();
+  });
 
   window.form = {
-    enableForm: enableForm,
-    disableForm: disableForm
+    enable: enableForm,
+    disable: disableForm,
+    updateAddress: updateAddress
   };
 })();
