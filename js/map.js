@@ -79,16 +79,18 @@
     window.showCard.close();
     window.pin.mainPin.style.left = '';
     window.pin.mainPin.style.top = '';
+    window.filter.reset();
     window.form.disable();
     window.form.updateAddress(initialPinX, initialPinY);
     window.scrollTo(0, 0);
+    mapEl.removeEventListener('click', mapClickHandler, true);
   };
 
   const showOffersOnMap = function(data) {
     mapPinsListEl.appendChild(data);
   };
 
-  const renderOffers = function(data) {
+  const renderPins = function(data) {
     let pins = document.createDocumentFragment();
 
     data.forEach(function(offer, i) {
@@ -108,7 +110,7 @@
   const succesLoadDataHandler = function(loadedData) {
     loadedOffers = loadedData.slice(0);
     filteredOffers = loadedOffers.slice(0, PINS_QUANTITY);
-    let renderedPins = renderOffers(filteredOffers);
+    let renderedPins = renderPins(filteredOffers);
     showOffersOnMap(renderedPins);
     window.filter.enable();
   };
@@ -125,6 +127,20 @@
   };
 
   formResetEl.addEventListener('click', disablePage);
+
+  window.filter.setCallback(function() {
+    deletePins();
+    window.showCard.close();
+
+    filteredOffers = window.filter.apply(loadedOffers).slice(0, PINS_QUANTITY);
+
+    let updatedPins = renderPins(filteredOffers);
+
+    showOffersOnMap(updatedPins);
+  });
+
+  // Set default address
+  window.form.updateAddress(initialPinX, initialPinY);
 
   window.map = {
     checkPageState: checkPageState,

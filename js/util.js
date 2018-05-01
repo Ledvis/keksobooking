@@ -1,10 +1,12 @@
 'use strict';
 
-(function () {
+(function() {
   const keyCode = {
     ESC: 27,
     ENTER: 13
   };
+  const DEBOUNCE_INTERVAL = 500; // ms
+  let lastTimeout;
 
   window.util = {
     getRandomIndex: function(arr) {
@@ -16,7 +18,7 @@
     getRandomNumber: function(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     },
-    getRandomArr: function (arr, n) {
+    getRandomArr: function(arr, n) {
       let newArr = [];
       let originalArr = arr.slice();
 
@@ -37,6 +39,13 @@
       if (evt.keyCode === keyCode.ENTER) {
         action();
       }
+    },
+    debounce: function(fun) {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+
+      lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL);
     }
   };
 })();

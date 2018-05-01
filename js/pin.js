@@ -66,6 +66,11 @@
         window.map.activatePage();
       }
 
+      let shiftedPinX = mainPinEl.offsetLeft;
+      let shiftedPinY = mainPinEl.offsetTop + MAIN_PIN_ARROW_CORRECTION;
+
+      window.form.updateAddress(shiftedPinX, shiftedPinY);
+
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
@@ -85,5 +90,5 @@
 
   window.pin = {
     mainPin: mainPinEl
-  }
+  };
 })();

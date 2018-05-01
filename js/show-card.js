@@ -1,12 +1,14 @@
 'use strict';
 
 (function() {
-  const mapFiltersEl = document.querySelector('.map__filters-container');
-  const mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
-  const photoDimension = {
+  const MAX_PHOTOS = 6;
+  const photoSize = {
     WIDTH: 70,
     HEIGHT: 70
   };
+
+  const mapFiltersEl = document.querySelector('.map__filters-container');
+  const mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
 
   const getFeatures = function(data) {
     let features = document.createDocumentFragment();
@@ -28,8 +30,8 @@
       let photoImg = document.createElement('img');
 
       photoImg.src = item;
-      photoImg.width = photoDimension.WIDTH;
-      photoImg.height = photoDimension.HEIGHT;
+      photoImg.width = photoSize.WIDTH;
+      photoImg.height = photoSize.HEIGHT;
       photoItem.appendChild(photoImg);
       photos.appendChild(photoItem);
     });
@@ -107,14 +109,14 @@
       featuresList.parentNode.removeChild(featuresList);
     }
 
-    // Render pictures
+    // Render offer photos
     const photosList = offerCard.querySelector('.popup__pictures');
 
     if (card.offer.photos !== 0) {
       while (photosList.firstChild) {
         photosList.removeChild(photosList.firstChild);
       }
-      photosList.appendChild(getPhotos(card.offer.photos));
+      photosList.appendChild(getPhotos(card.offer.photos.slice(0, MAX_PHOTOS)));
     }
 
     // Insert card in DOM

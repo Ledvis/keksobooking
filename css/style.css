@@ -565,6 +565,12 @@ textarea:focus {
   width: 140px;
 }
 
+.form__photo {
+  display: inline-block;
+  margin-right: 2px;
+  cursor: move;
+}
+
 .form__element--submit {
   width: 100%;
   padding: 40px 0;
