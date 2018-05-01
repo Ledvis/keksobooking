@@ -19,14 +19,6 @@
   let initialPinX = window.pin.mainPin.offsetLeft;
   let initialPinY = window.pin.mainPin.offsetTop + MAP_PIN_ARROW_Y_CORRECTION;
 
-  const clearOfferInfo = function() {
-    let mapCard = mapEl.querySelector('.map__card');
-    if (mapCard) {
-      mapCard.parentNode.removeChild(mapCard);
-      mapEl.removeEventListener('keydown', popUpEscHandler);
-    }
-  };
-
   const mapClickHandler = function(evt) {
     let clickedEl = evt.target;
 
@@ -41,36 +33,12 @@
     }
   };
 
-  const popUpEscHandler = function(evt) {
-    window.util.isEscEvent(evt, clearOfferInfo);
-  };
-
-  mapEl.addEventListener('click', mapClickHandler, true);
-  mapEl.addEventListener('keydown', popUpEscHandler, true);
-
-  const generatePins = function(data) {
-    let fragment = document.createDocumentFragment();
-
-    for (let i = 0; i < data.length; i++) {
-      let newPin = mapPinTemplate.cloneNode(true);
-      let newPinLeft = (data[i].location.x - window.consts.PIN_HALF_WIDTH) + 'px';
-      let newPinTop = (data[i].location.y - window.consts.PIN_FULL_HEIGHT) + 'px';
-      newPin.setAttribute('style', 'left: ' + newPinLeft + '; top: ' + newPinTop);
-      newPin.querySelector('img').setAttribute('src', data[i].author.avatar);
-      newPin.setAttribute('data-pin', i);
-      fragment.appendChild(newPin);
-    }
-
-    mapPinsListEl.appendChild(fragment);
-  };
-
   const deletePins = function() {
     let pins = mapEl.querySelectorAll('.map__pin:not(.map__pin--main)');
 
     pins.forEach(function(item) {
       item.parentNode.removeChild(item);
     });
-    mapEl.removeEventListener('keydown', popUpEscHandler, true);
   };
 
   const disablePage = function() {
@@ -117,9 +85,10 @@
 
   const activatePage = function() {
     mapEl.classList.remove(MAP_DISABLED_CLASS);
+    window.notification.hideAll();
     window.form.enable();
     window.backend.load(succesLoadDataHandler, window.notification.showError);
-    generatePins(window.data.offersList);
+    mapEl.addEventListener('click', mapClickHandler, true);
   };
 
   const checkPageState = function() {
@@ -145,7 +114,6 @@
   window.map = {
     checkPageState: checkPageState,
     activatePage: activatePage,
-    disablePage: disablePage,
-    clearOfferInfo: clearOfferInfo
+    disablePage: disablePage
   };
 })();

@@ -22,6 +22,16 @@
     return features;
   };
 
+  const translateOfferType = function(type) {
+    const accomodationType = {
+      'flat': 'Квартира',
+      'house': 'Дом',
+      'bungalo': 'Халупа'
+    };
+
+    return accomodationType[type];
+  };
+
   const getPhotos = function(data) {
     let photos = document.createDocumentFragment();
 
@@ -91,7 +101,7 @@
     offerCard.querySelector('.popup__title').textContent = card.offer.title;
     offerCard.querySelector('.popup__address').textContent = card.offer.adress;
     offerCard.querySelector('.popup__price').textContent = card.offer.price + ' \u20BD/ночь';
-    offerCard.querySelector('.popup__type').textContent = card.offer.type;
+    offerCard.querySelector('.popup__type').textContent = translateOfferType(card.offer.type);
     offerCard.querySelector('.popup__description').textContent = card.offer.description;
     offerCard.querySelector('.popup__accommodation').textContent = pluralizeRooms(card.offer.rooms) + pluralizeGuests(card.offer.guests);
     offerCard.querySelector('.popup__schedule').textContent = 'Заезд после ' + card.offer.checkin + ', выезд до ' + card.offer.checkout;
