@@ -35,16 +35,16 @@
   const getPhotos = function(data) {
     let photos = document.createDocumentFragment();
 
-    data.forEach(function(item) {
+    for (let i = 0; i < Math.min(data.length, MAX_PHOTOS); i++) {
       let photoItem = document.createElement('li');
       let photoImg = document.createElement('img');
 
-      photoImg.src = item;
+      photoImg.src = data[i];
       photoImg.width = photoSize.WIDTH;
       photoImg.height = photoSize.HEIGHT;
       photoItem.appendChild(photoImg);
       photos.appendChild(photoItem);
-    });
+    }
 
     return photos;
   };
@@ -126,7 +126,7 @@
       while (photosList.firstChild) {
         photosList.removeChild(photosList.firstChild);
       }
-      photosList.appendChild(getPhotos(card.offer.photos.slice(0, MAX_PHOTOS)));
+      photosList.appendChild(getPhotos(card.offer.photos));
     }
 
     // Insert card in DOM
